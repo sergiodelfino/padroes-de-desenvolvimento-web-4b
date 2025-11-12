@@ -2,18 +2,21 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
-    git \
-    git-lfs \
-    openjdk-21-jdk \
-    maven \
-    mysql-server \
+RUN apt-get update && apt-get install -y curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get update && apt-get install -y \
+        git \
+        git-lfs \
+        openjdk-21-jdk \
+        maven \
+        mysql-server \
+        nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo "CREATE USER 'sergio'@'localhost' IDENTIFIED BY 'Unifio@123'; \
-        GRANT ALL PRIVILEGES ON *.* TO 'sergio'@'localhost' WITH GRANT OPTION; \
-        CREATE DATABASE projeto; \
-        FLUSH PRIVILEGES;" > /tmp/script.sql
+          GRANT ALL PRIVILEGES ON *.* TO 'sergio'@'localhost' WITH GRANT OPTION; \
+          CREATE DATABASE projeto; \
+          FLUSH PRIVILEGES;" > /tmp/script.sql
 
 RUN service mysql start && \
     sleep 5 && \
